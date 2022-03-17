@@ -163,6 +163,8 @@ def convert_shape_format(shape):
     for i, index in enumerate(pos):
         pos[i] = (index[0]-2, index[1] - 4)
 
+    return pos
+
 
 def valid_space(shape, grid):
     # Create Sublist like [[(2,3)], [(0,1)]]
@@ -214,25 +216,42 @@ def clear_rows(grid, locked):
 
 
 def draw_next_shape(shape, surface):
-    pass
+    font = pygame.font.SysFont('calibri', 35)
+    label = font.render('Next Shape', 1, (255, 255, 255))
+
+    start_x = top_left_x + play_width + 50
+    start_y = top_left_y + play_height/2 - 100
+
+    style = shape.shape[shape.rotation % len(shape.shape)]
+    for i, line in enumerate(style):
+        row = list(line)
+        for j, column in enumerate(row):
+            if column == '0':
+                pygame.draw.rect(surface, shape.color, (start_x+j*block_size,
+                                start_y+i*block_size, block_size, block_size))
+                pygame.draw.rect(surface, (128, 128, 128), (start_x+j*block_size,
+                                start_y+i*block_size, block_size, block_size), 1)
+    surface.blit(label, (start_x+10, start_y-30))
 
 
-def draw_window(surface):
+def draw_window(surface, grid):
     surface.fill((0, 0, 0))
     pygame.font.init()
     font = pygame.font.SysFont('calibri', 70)
     label = font.render('Tetris', 1, (255, 255, 255))
 
-    surface.blit(label, (top_left_x+play_width/2 - label.get_width()/2), 30)
+    surface.blit(label, (top_left_x + play_width /
+                 2 - (label.get_width()/2), 30))
 
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             pygame.draw.rect(
-                surface, grid[i][j], (top_left_x + j*block_size, top_left_y + i*block_size, block_size, block_size, 0))
-    pygame.draw.rect(surface, (255, 0, 0), (top_left_x,
-                     top_left_y, play_width, play_height), 4)
+                surface, grid[i][j], (top_left_x + j*block_size, top_left_y + i*block_size, block_size, block_size), 0)
+
     draw_grid(surface, grid)
-    pygame.display.update()
+    pygame.draw.rect(surface, (255, 0, 0), (top_left_x,
+                     top_left_y, play_width, play_height), 5)
+    # pygame.display.update()
 
 
 def main(win):
@@ -267,11 +286,11 @@ def main(win):
                 if event.key == pygame.K_LEFT:  # move block left
                     current_piece.x -= 1
                     if not(valid_space(current_piece, grid)):
-                        current_piece += 1
+                        current_piece.x += 1
                 if event.key == pygame.K_RIGHT:  # move block right
                     current_piece.x += 1
                     if not(valid_space(current_piece, grid)):
-                        current_piece -= 1
+                        current_piece.x -= 1
                 if event.key == pygame.K_UP:  # rotate key
                     current_piece.y += 1
                     if not(valid_space(current_piece, grid)):
@@ -297,16 +316,19 @@ def main(win):
             change_piece = False
 
         draw_window(win, grid)
+        draw_next_shape(next_piece, win)
+        pygame.display.update()
 
         if check_lost(locked_positions):
             run = False
 
-    pygame.display.quit() #quit the game
+    pygame.display.quit()  # quit the game
+
 
 def main_menu(win):
     main(win)
 
 
 win = pygame.display.set_mode((s_width, s_height))
-pygame.display.net_caption('Tetris')
+pygame.display.set_caption('Tetris')
 main_menu(win)  # start game
