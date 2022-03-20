@@ -5,9 +5,8 @@ Description
 
 Installation 
 ------------
+Require to have pygame install.
 
 To Run Application 
 ------------------
-
-Demo
------
+Clone the repos: ``git clone https://github.com/VanMinhN/Tetris.git``
