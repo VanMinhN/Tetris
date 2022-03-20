@@ -5,8 +5,8 @@ Description
 
 Installation 
 ------------
-Require to have pygame install.
-Require pip and py to be the latest version as of March 20, 2022
+Require to have pygame install. <br>
+Require pip and py to be the latest version as of March 20, 2022.
 
 To Run Application 
 ------------------
