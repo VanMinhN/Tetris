@@ -272,8 +272,7 @@ def draw_window(surface, grid, score, last_score):
     font = pygame.font.SysFont("calibri", 70)
     label = font.render("Tetris", 1, (255, 255, 255))
 
-    surface.blit(label, (top_left_x + play_width /
-                 2 - (label.get_width() / 2), 30))
+    surface.blit(label, (top_left_x + play_width / 2 - (label.get_width() / 2), 30))
     # drawing the score
     font = pygame.font.SysFont("calibri", 35)
     label = font.render("Score: " + str(score), 1, (255, 255, 255))
@@ -306,8 +305,7 @@ def draw_window(surface, grid, score, last_score):
 
     draw_grid(surface, grid)
     pygame.draw.rect(
-        surface, (255, 0, 0), (top_left_x, top_left_y,
-                               play_width, play_height), 5
+        surface, (255, 0, 0), (top_left_x, top_left_y, play_width, play_height), 5
     )
     # pygame.display.update()
 
@@ -351,7 +349,7 @@ def main(win):
         level_time += clock.get_rawtime()
         clock.tick()
 
-        if(level_time / 1000) > 5:
+        if (level_time / 1000) > 5:
             level_time = 0
             if level_time > 0.12:
                 level_time -= 0.005
