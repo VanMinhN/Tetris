@@ -1,8 +1,9 @@
+import random
 from distutils import core
 from operator import truediv
 from turtle import shape
+
 import pygame
-import random
 
 pygame.font.init()
 
