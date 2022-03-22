@@ -1,9 +1,12 @@
 import random
-from distutils import core
-from operator import truediv
-from turtle import shape
-
 import pygame
+
+"""
+10 x 20 square grid
+shapes: S, Z, I, O, J, L, T
+represented in order by 0 - 6
+
+"""
 
 pygame.font.init()
 
@@ -17,13 +20,6 @@ block_size = 30
 # Collision checking
 top_left_x = (s_width - play_width) // 2
 top_left_y = s_height - play_height
-
-"""
-10 x 20 square grid
-shapes: S, Z, I, O, J, L, T
-represented in order by 0 - 6
-
-"""
 
 # This is S shape
 #     00
@@ -273,7 +269,8 @@ def draw_window(surface, grid, score, last_score):
     font = pygame.font.SysFont("calibri", 70)
     label = font.render("Tetris", 1, (255, 255, 255))
 
-    surface.blit(label, (top_left_x + play_width / 2 - (label.get_width() / 2), 30))
+    surface.blit(label, (top_left_x + play_width /
+                 2 - (label.get_width() / 2), 30))
     # drawing the score
     font = pygame.font.SysFont("calibri", 35)
     label = font.render("Score: " + str(score), 1, (255, 255, 255))
@@ -283,7 +280,7 @@ def draw_window(surface, grid, score, last_score):
     surface.blit(label, (start_x + 20, start_y + 180))
 
     # drawing high score
-    font = pygame.font.SysFont("calibri", 35)
+    font = pygame.font.SysFont("calibri", 30)
     label = font.render("High Score: " + str(last_score), 1, (255, 255, 255))
 
     start_x = top_left_x - 250
@@ -306,15 +303,16 @@ def draw_window(surface, grid, score, last_score):
 
     draw_grid(surface, grid)
     pygame.draw.rect(
-        surface, (255, 0, 0), (top_left_x, top_left_y, play_width, play_height), 5
+        surface, (255, 0, 0), (top_left_x, top_left_y,
+                               play_width, play_height), 5
     )
     # pygame.display.update()
 
 
 def max_score():
     with open("score.txt", "r") as f:
-        lines = f.readline()
-        score = lines[0].strip()  # remove the \n in the text file
+        lines = f.read().splitlines() #remove newline
+        score = lines
     return score
 
 
@@ -329,7 +327,8 @@ def update_score(_score):
 
 
 def main(win):
-    last_score = max_score()
+    #remove [' and '] in the list
+    last_score = str(max_score()).lstrip("['").rstrip("']")
     global grid
     locked_positions = {}
     grid = create_grid(locked_positions)
