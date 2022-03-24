@@ -22,6 +22,7 @@ block_size = 30
 top_left_x = (s_width - play_width) // 2
 top_left_y = s_height - play_height
 
+
 # This is S shape
 #     00
 #    00
@@ -105,6 +106,8 @@ shape_colors = [
 ]
 # index 0 - 6 represent shape
 
+# Tetris piece class
+
 
 class Piece(object):
     def __init__(self, x, y, shape):
@@ -113,6 +116,38 @@ class Piece(object):
         self.shape = shape
         self.color = shape_colors[shapes.index(shape)]
         self.rotation = 0
+
+# Button Class
+
+
+class Button():
+    def __init__(self, x, y, image, scale):
+        width = image.get_width()
+        height = image.get_height()
+        self.image = pygame.transform.scale(
+            image, (int(width*scale), int(height*scale)))
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.clicked = False
+
+    def draw(self, surface):
+        action = False
+        # get mouse pos
+        pos = pygame.mouse.get_pos()
+
+        # check mouseover and clicked conditions
+        if self.rect.collidepoint(pos):
+            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
+                self.clicked = True
+                action = True
+
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+
+        # draw button
+        surface.blit(self.image, (self.rect.x, self.rect.y))
+
+        return action
 
 
 def create_grid(locked_positions={}):
@@ -411,19 +446,26 @@ def main(win):
 
 
 def main_menu(win):
+    # create button instance
+    start_btn = Button(100, 200, start_btn_image, 0.2)
     run = True
     while run:
         win.fill((0, 0, 0))  # fill the screen with black
         draw_text_middle(win, "Press Any key to Play", 60, (255, 255, 255))
+        if start_btn.draw(win):
+            run = main(win)
         pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for event in pygame.event.get():    # event game handler
+            if event.type == pygame.QUIT:   # quit game
                 run = False
-            if event.type == pygame.KEYDOWN:
-                run = main(win)
     pygame.display.quit()  # quit the game
 
 
 win = pygame.display.set_mode((s_width, s_height))
 pygame.display.set_caption("Tetris")
+
+# Load Button Img
+# img source: https://pngtree.com/freepng/the-start-button_286495.html
+start_btn_image = pygame.image.load("./img/StartBTN.png").convert_alpha()
+
 main_menu(win)  # start game
