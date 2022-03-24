@@ -117,15 +117,17 @@ class Piece(object):
         self.color = shape_colors[shapes.index(shape)]
         self.rotation = 0
 
+        
 # Button Class
 
 
-class Button():
+class Button:
     def __init__(self, x, y, image, scale):
         width = image.get_width()
         height = image.get_height()
         self.image = pygame.transform.scale(
-            image, (int(width*scale), int(height*scale)))
+            image, (int(width*scale), int(height*scale))
+        )
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.clicked = False
@@ -455,7 +457,7 @@ def main_menu(win):
         if start_btn.draw(win):
             run = main(win)
         pygame.display.update()
-        for event in pygame.event.get():    # event game handler
+        for event in pygame.event.get():   # event game handler
             if event.type == pygame.QUIT:   # quit game
                 run = False
     pygame.display.quit()  # quit the game
