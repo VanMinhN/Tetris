@@ -17,6 +17,7 @@ s_height = 700  # screen height
 play_width = 300  # meaning 300 // 10 = 30 width per block
 play_height = 600  # meaning 600 // 20 = 20 height per block
 block_size = 30
+quit_boolean = True
 
 # Collision checking
 top_left_x = (s_width - play_width) // 2
@@ -140,6 +141,7 @@ class Button:
 
         # check mouseover and clicked conditions
         if self.rect.collidepoint(pos):
+            # pygame.mouse.get_pressed()[0] -> 0 is left mouse, 1 is middle mouse, 2 is right mouse
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
                 action = True
@@ -308,7 +310,8 @@ def draw_window(surface, grid, score, last_score):
     font = pygame.font.SysFont("calibri", 70)
     label = font.render("Tetris", 1, (255, 255, 255))
 
-    surface.blit(label, (top_left_x + play_width / 2 - (label.get_width() / 2), 30))
+    surface.blit(label, (top_left_x + play_width /
+                 2 - (label.get_width() / 2), 30))
     # drawing the score
     font = pygame.font.SysFont("calibri", 35)
     label = font.render("Score: " + str(score), 1, (255, 255, 255))
@@ -341,7 +344,8 @@ def draw_window(surface, grid, score, last_score):
 
     draw_grid(surface, grid)
     pygame.draw.rect(
-        surface, (255, 0, 0), (top_left_x, top_left_y, play_width, play_height), 5
+        surface, (255, 0, 0), (top_left_x, top_left_y,
+                               play_width, play_height), 5
     )
     # pygame.display.update()
 
@@ -355,15 +359,16 @@ def max_score():
 
 def update_score(_score):
     score = max_score()
-
+    score2 = str(score).lstrip("['").rstrip("']")
     with open("score.txt", "w") as f:
-        if int(score) > _score:  # convert string into int for comparing
+        if int(score2) > _score:  # convert string into int for comparing
             f.write(str(score))
         else:
             f.write(str(_score))
 
 
 def main(win):
+    global quit_boolean
     # remove [' and '] in the list
     last_score = str(max_score()).lstrip("['").rstrip("']")
     global grid
@@ -400,8 +405,8 @@ def main(win):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                quit_boolean = False
                 run = False
-                return run
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:  # move block left
                     current_piece.x -= 1
@@ -449,26 +454,37 @@ def main(win):
 
 
 def main_menu(win):
+    global quit_boolean
     # create button instance
-    start_btn = Button(100, 200, start_btn_image, 0.2)
+    start_btn = Button(s_width/2 - 100, s_height/2, start_btn_image, 0.2)
+    exit_btn = Button(s_width/2 - 100, s_height/2 + 100, exit_btn_image, 0.2)
     run = True
     while run:
         win.fill((0, 0, 0))  # fill the screen with black
-        draw_text_middle(win, "Press Any key to Play", 60, (255, 255, 255))
+        # draw_text_middle(win, "Press Any key to Play", 60, (255, 255, 255))
         if start_btn.draw(win):
-            run = main(win)
+            main(win)
+        # Exit Btn
+        if exit_btn.draw(win):
+            run = False
         pygame.display.update()
         for event in pygame.event.get():  # event game handler
             if event.type == pygame.QUIT:  # quit game
                 run = False
-    pygame.display.quit()  # quit the game
+        if (quit_boolean != True):
+            run = False
+    pygame.display.quit()  # quit the window
 
 
 win = pygame.display.set_mode((s_width, s_height))
 pygame.display.set_caption("Tetris")
 
 # Load Button Img
-# img source: https://pngtree.com/freepng/the-start-button_286495.html
-start_btn_image = pygame.image.load("./img/StartBTN.png").convert_alpha()
+# Source: Menu vector created by upklyak - https://www.freepik.com/free-vector/set-game-menu-elements-textile-woven-texture-icons_24655610.htm#query=exit%20button&position=1&from_view=search
+start_btn_image = pygame.image.load("./img/Start_BTN.jpg").convert_alpha()
+
+# Exit Button Img
+# Source: Menu vector created by upklyak - https://www.freepik.com/free-vector/set-game-menu-elements-textile-woven-texture-icons_24655610.htm#query=exit%20button&position=1&from_view=search
+exit_btn_image = pygame.image.load("./img/Exit_BTN.jpg").convert_alpha()
 
 main_menu(win)  # start game
