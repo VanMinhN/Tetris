@@ -119,7 +119,6 @@ class Piece(object):
         self.rotation = 0
 
 
-        
 # Button Class
 
 
@@ -457,13 +456,17 @@ def main_menu(win):
     global quit_boolean
     # create button instance
     start_btn = Button(s_width/2 - 100, s_height/2, start_btn_image, 0.2)
-    exit_btn = Button(s_width/2 - 100, s_height/2 + 100, exit_btn_image, 0.2)
+    rule_btn = Button(s_width/2 - 100, s_height/2 + 100, rule_btn_image, 1)
+    exit_btn = Button(s_width/2 - 100, s_height/2 + 200, exit_btn_image, 0.2)
     run = True
     while run:
         win.fill((0, 0, 0))  # fill the screen with black
         # draw_text_middle(win, "Press Any key to Play", 60, (255, 255, 255))
         if start_btn.draw(win):
             main(win)
+        # Rules Option in the Main Menu
+        if rule_btn.draw(win):
+            rules_window(win)
         # Exit Btn
         if exit_btn.draw(win):
             run = False
@@ -471,9 +474,30 @@ def main_menu(win):
         for event in pygame.event.get():  # event game handler
             if event.type == pygame.QUIT:  # quit game
                 run = False
-        if (quit_boolean != True):
+        if not quit_boolean:
             run = False
     pygame.display.quit()  # quit the window
+
+
+# Will Create a New window for Game rules and such
+
+
+def rules_window(win):
+    run = True
+    global quit_boolean
+    # Game Loop
+    while run:
+        win.fill((0, 0, 0))  # Fill the screen with black color
+        draw_text_middle(
+            win, "Press any key to go back after finish reading the rules", 20, (255, 255, 255))
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+                quit_boolean = False
+            if event.type == pygame.KEYDOWN:
+                run = False
+    pygame.display.update()  # Testing
 
 
 win = pygame.display.set_mode((s_width, s_height))
@@ -486,5 +510,9 @@ start_btn_image = pygame.image.load("./img/Start_BTN.jpg").convert_alpha()
 # Exit Button Img
 # Source: Menu vector created by upklyak - https://www.freepik.com/free-vector/set-game-menu-elements-textile-woven-texture-icons_24655610.htm#query=exit%20button&position=1&from_view=search
 exit_btn_image = pygame.image.load("./img/Exit_BTN.jpg").convert_alpha()
+
+# Help/Rules Button Img
+# Source: GUI Items created by GameSupplyGuy - https://gamesupply.itch.io/gui-items-buttons
+rule_btn_image = pygame.image.load("./img/Rules_BTN.png").convert_alpha()
 
 main_menu(win)  # start game
