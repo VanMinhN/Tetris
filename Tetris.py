@@ -211,7 +211,7 @@ def get_shape():
     return Piece(5, 0, random.choice(shapes))
 
 
-def draw_text_middle(surface, text, size, color):
+def draw_text_middle(surface, text, size, color, pos):
     font = pygame.font.SysFont("calibri", size, bold=True)
     label = font.render(text, 1, color)
 
@@ -219,7 +219,7 @@ def draw_text_middle(surface, text, size, color):
         label,
         (
             top_left_x + play_width / 2 - (label.get_width() / 2),
-            top_left_y + play_height / 2 - (label.get_height() / 2),
+            top_left_y + play_height / 2 - (label.get_height() / 2) + pos,
         ),
     )
 
@@ -445,7 +445,7 @@ def main(win):
         pygame.display.update()
 
         if check_lost(locked_positions):
-            draw_text_middle(win, "You Lost!", 90, (255, 255, 255))
+            draw_text_middle(win, "You Lost!", 90, (255, 255, 255), 0)
             pygame.display.update()
             pygame.time.delay(1500)  # delay for one and half a second
             run = False
@@ -488,8 +488,18 @@ def rules_window(win):
     # Game Loop
     while run:
         win.fill((0, 0, 0))  # Fill the screen with black color
+        # Draw the Rules/Instructions in the window
+        # First line will be key control -> Num.Key left and right, up is rotation, down is speed up the fall
         draw_text_middle(
-            win, "Press any key to go back after finish reading the rules", 20, (255, 255, 255))
+            win, "Movement: Use Arrow Keys to control the Tetris pieces", 20, (255, 255, 255), -200)
+        draw_text_middle(
+            win, "Arrow Key Up is rotating the piece, Arrow Key down is speed up fallen speed", 20, (255, 255, 255), -150)
+        draw_text_middle(
+            win, "Arrow Key Left is to move piece to the left, Arrow Key right is move to the right", 20, (255, 255, 255), -100)
+        draw_text_middle(
+            win, "Scoring: Any fill row is worth 10 points", 20, (255, 255, 255), 0)
+        draw_text_middle(
+            win, "Press any key to go back after finish reading the instruction", 20, (255, 255, 255), 150)
         pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
