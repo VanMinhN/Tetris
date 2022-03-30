@@ -2,6 +2,7 @@ import random
 
 import pygame
 
+from pygame import mixer
 """
 10 x 20 square grid
 shapes: S, Z, I, O, J, L, T
@@ -9,7 +10,9 @@ represented in order by 0 - 6
 
 """
 
+pygame.mixer.pre_init(44100, -16, 2, 512)
 pygame.font.init()
+pygame.init()  # Initiate pygame
 
 # GLOBALS VARS
 s_width = 800  # screen width
@@ -22,6 +25,20 @@ quit_boolean = True
 # Collision checking
 top_left_x = (s_width - play_width) // 2
 top_left_y = s_height - play_height
+
+# Music Variable
+# Sound effect -> file extension must be .wav for pygame
+# Music/soundtrack -> file extension can be .wav or .mp3 for pygame
+
+# Credit: https://mixkit.co/free-sound-effects/click/
+ButtonSound = pygame.mixer.Sound("./Soundtrack/ButtonClick.wav")
+ButtonSound.set_volume(0.4)
+# Credit: https://archive.org/details/TetrisThemeMusic
+# get the soundtrack in music folder
+soundtrack = pygame.mixer.music.load("./Soundtrack/Tetris.mp3")
+# -1 is to play continuously even when the sound track is end, it will replay
+pygame.mixer.music.set_volume(0.2)
+pygame.mixer.music.play(-1)
 
 
 # This is S shape
@@ -463,12 +480,15 @@ def main_menu(win):
         win.fill((0, 0, 0))  # fill the screen with black
         # draw_text_middle(win, "Press Any key to Play", 60, (255, 255, 255))
         if start_btn.draw(win):
+            ButtonSound.play()
             main(win)
         # Rules Option in the Main Menu
         if rule_btn.draw(win):
+            ButtonSound.play()
             rules_window(win)
         # Exit Btn
         if exit_btn.draw(win):
+            ButtonSound.play()
             run = False
         pygame.display.update()
         for event in pygame.event.get():  # event game handler
