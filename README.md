@@ -2,6 +2,7 @@
 
 Description 
 -----------
+This is an simple Tetris game that is developed on Window Platform. I build this game because I am interesting in learning and improve my python skills. I hope you find enjoyment in playing this Tetris game just as much as I enjoy developing it. 
 
 Installation 
 ------------
