@@ -1,6 +1,7 @@
 import random
 
 import pygame
+from Button_Menu import *
 
 from pygame import mixer
 """
@@ -134,41 +135,6 @@ class Piece(object):
         self.shape = shape
         self.color = shape_colors[shapes.index(shape)]
         self.rotation = 0
-
-
-# Button Class
-
-
-class Button:
-    def __init__(self, x, y, image, scale):
-        width = image.get_width()
-        height = image.get_height()
-        self.image = pygame.transform.scale(
-            image, (int(width * scale), int(height * scale))
-        )
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.clicked = False
-
-    def draw(self, surface):
-        action = False
-        # get mouse pos
-        pos = pygame.mouse.get_pos()
-
-        # check mouseover and clicked conditions
-        if self.rect.collidepoint(pos):
-            # pygame.mouse.get_pressed()[0] -> 0 is left mouse, 1 is middle mouse, 2 is right mouse
-            if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
-                self.clicked = True
-                action = True
-
-        if pygame.mouse.get_pressed()[0] == 0:
-            self.clicked = False
-
-        # draw button
-        surface.blit(self.image, (self.rect.x, self.rect.y))
-
-        return action
 
 
 def create_grid(locked_positions={}):
@@ -418,7 +384,8 @@ def main(win):
             if not (valid_space(current_piece, grid)) and current_piece.y > 0:
                 current_piece.y -= 1
                 change_piece = True
-
+        # Creating a return to menu button
+        # if(return_btn.draw(win)){run = False} # if player click on this then will exit game loop and return to main menu after finish executing the current iteration of the loop
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit_boolean = False
@@ -478,6 +445,8 @@ def main_menu(win):
     run = True
     while run:
         win.fill((0, 0, 0))  # fill the screen with black
+        draw_text_middle(
+            win, "TETRIS", 60, (255, 255, 255), -200)
         # draw_text_middle(win, "Press Any key to Play", 60, (255, 255, 255))
         if start_btn.draw(win):
             ButtonSound.play()
@@ -535,11 +504,11 @@ pygame.display.set_caption("Tetris")
 
 # Load Button Img
 # Source: Menu vector created by upklyak - https://www.freepik.com/free-vector/set-game-menu-elements-textile-woven-texture-icons_24655610.htm#query=exit%20button&position=1&from_view=search
-start_btn_image = pygame.image.load("./img/Start_BTN.jpg").convert_alpha()
+start_btn_image = pygame.image.load("./img/Start_BTN.png").convert_alpha()
 
 # Exit Button Img
 # Source: Menu vector created by upklyak - https://www.freepik.com/free-vector/set-game-menu-elements-textile-woven-texture-icons_24655610.htm#query=exit%20button&position=1&from_view=search
-exit_btn_image = pygame.image.load("./img/Exit_BTN.jpg").convert_alpha()
+exit_btn_image = pygame.image.load("./img/Exit_Btn.png").convert_alpha()
 
 # Help/Rules Button Img
 # Source: GUI Items created by GameSupplyGuy - https://gamesupply.itch.io/gui-items-buttons
